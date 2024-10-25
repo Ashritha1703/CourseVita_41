@@ -1,47 +1,17 @@
-const express = require('express');
-const http = require('http');
-const socketIo = require('socket.io');
-const cors = require('cors');
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
 
-const app = express();
-app.use(cors());
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
 
-const server = http.createServer(app);
-const io = socketIo(server, {
-    cors: {
-        origin: '*',
-        methods: ['GET', 'POST'],
-        credentials: true
-    }
-});     
-
-io.on('connection', (socket) => {
-    console.log('New client connected');
-    
-    socket.on('edit', (content) => {
-        io.emit('updateContent', content);
-    });
-
-    socket.on('bold', (bold) => {
-        io.emit('updateStyleBold', bold);
-    });
-
-    socket.on('italic', (italic) => {
-        io.emit('updateStyleItalic', italic);
-    });
-
-    socket.on('underline', (underline) => {
-        io.emit('updateStyleUnderline', underline);
-    });
-
-    socket.on('disconnect', () => {
-        console.log('Client disconnected');
-    });
-});
-
-app.get('/', (req, res) => {
-  res.send('Hello, World!');
-});
-
-const PORT = 3002;
-server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();
